@@ -16,13 +16,34 @@ def getTeachers():
     return collection.distinct("teacherID")
 
 def selectTeacher(id):
-    teachers = collection.find({"teacherID": id}).toArray()
+    teachers = collection.find({"teacherID": id})
     all_good_comments = []
     all_bad_comments = []
-    
-    if len(teachers) == 0:
-        return None
-    
+        
+    name = ""
     for teacher in teachers:
-        print(teacher)
+        for c in teacher["comments"]["good_comments"]:
+            all_good_comments.append(c)
+            
+        for c in teacher["comments"]["bad_comments"]:
+            all_bad_comments.append(c)
+            
+        name = teacher["teacherName"]
+    
+    data = {
+        'teacherID': id,
+        'teacherName': name,
+        'all_good_comments': all_good_comments,
+        'all_bad_comments': all_bad_comments,
+        'summary': ''
+    }
+    
+    x = db["allComments"]
+    x.insert_one(data)
+
+def selectTeacherAllComments(id):
+    x = db["allComments"]
+    comments = x.find_one({"teacherID": id})
+    
+    
     
