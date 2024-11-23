@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import json
 import ai
+import re
 
 load_dotenv()
 
@@ -79,6 +80,7 @@ def apiSelectTeacher(id):
     return _buildJSON(comments)
 
 def searchTeacher(q):
+    q = re.escape(q)
     x = db["allComments"]
     query = {"teacherName": {"$regex": q, "$options": "i"}}  # Case-insensitive regex
     search = x.find(query).limit(10)
