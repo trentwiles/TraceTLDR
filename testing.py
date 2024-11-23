@@ -15,7 +15,7 @@ courses = main.getEvalURLs(auth, 181, "CS")
 
 # Step Three: Read CSV with Comment URLs, and extract positive and negative comments
 print("Step Three: Read CSV with Comment URLs, and extract positive and negative comments")
-main.processEachComments("data.csv")
+main.processEachComments("data.csv", auth)
 
 # Step Four: Collect comments per professor, from mongo, then add them to allComments
 print("Step Four: Collect comments per professor, from mongo, then add them to allComments")
