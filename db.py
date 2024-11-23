@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import ai
 
 load_dotenv()
 
@@ -35,15 +36,30 @@ def selectTeacher(id):
         'teacherName': name,
         'all_good_comments': all_good_comments,
         'all_bad_comments': all_bad_comments,
-        'summary': ''
+        'good_summary': '',
+        'bad_summary': ''
     }
     
     x = db["allComments"]
     x.insert_one(data)
 
-def selectTeacherAllComments(id):
+def selectTeacherAllCommentsAndSummarize(id):
     x = db["allComments"]
     comments = x.find_one({"teacherID": id})
     
+    goodCommentsString = ""
+    badCommentsString = ""
+    
+    for x in comments["all_good_comments"]:
+        goodCommentsString += x + ", "
+        
+    for x in comments["all_bad_comments"]:
+        badCommentsString += x + ", "
+    
+    goodWords = ai.summarize("positive", goodCommentsString)
+    badWords = ai.summarize("critical", badCommentsString)
+    
+    x.update_one({"teacherID": id}, {"$set": {"good_summary": goodWords}})
+    x.update_one({"teacherID": id}, {"$set": {"bad_summary": badWords}})
     
     
