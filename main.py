@@ -1,6 +1,8 @@
 import requests
 import os
 from bs4 import BeautifulSoup
+import db
+import time
 
 def authHeaders(cookieBlob):
     return  {
@@ -66,10 +68,22 @@ def processEachComments(csvFile, auth):
     # courseID,teacherID,teacherName,commentsURL
     with open(csvFile, "r") as file:
         for line in file:
+            time.sleep(2)
             l = line.strip()
             if "courseID" not in l:
                 data = l.split(",")
-                comments = scrapeCommentsPage(data[3], auth)
+                try:
+                    comments = scrapeCommentsPage(data[3], auth)
+                    mongoData = {
+                        "courseID": int(data[0]),
+                        "teacherID": int(data[1]),
+                        "teacherName": data[2].replace("-", " "),
+                        "comments": comments
+                    }
+                    db.insert(mongoData)
+                except AttributeError:
+                    print("couldn't scrape, some error")
+                
                 
 def scrapeCommentsPage(url, auth):
     print("scraping url " + url)
@@ -88,12 +102,15 @@ def scrapeCommentsPage(url, auth):
     good = []
     for td in good_comments_table.find_all("td"):
         if td.find("a") != None:
-            print(td.text.strip())
+            good.append(td.text.strip())
             
     bad = []
     for td in bad_comments_table.find_all("td"):
         if td.find("a") != None:
-            print(td.text.strip())
+            bad.append(td.text.strip())
     
     
+    return {"good_comments": good, "bad_comments": bad}
+
+def getAllCommentsPerProf():
     return
