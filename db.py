@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import json
 import ai
 
 load_dotenv()
@@ -50,11 +51,11 @@ def selectTeacherAllCommentsAndSummarize(id):
     goodCommentsString = ""
     badCommentsString = ""
     
-    for x in comments["all_good_comments"]:
-        goodCommentsString += x + ", "
+    for y in comments["all_good_comments"]:
+        goodCommentsString += y + ", "
         
-    for x in comments["all_bad_comments"]:
-        badCommentsString += x + ", "
+    for y in comments["all_bad_comments"]:
+        badCommentsString += y + ", "
     
     goodWords = ai.summarize("positive", goodCommentsString)
     badWords = ai.summarize("critical", badCommentsString)
@@ -62,4 +63,28 @@ def selectTeacherAllCommentsAndSummarize(id):
     x.update_one({"teacherID": id}, {"$set": {"good_summary": goodWords}})
     x.update_one({"teacherID": id}, {"$set": {"bad_summary": badWords}})
     
+def _buildJSON(comments):
+    if comments:
+        comments.pop("_id", None)
+        json_document = json.dumps(comments, default=str, indent=4)
+        return json_document
+    else:
+        return json.dumps({}, default=str, indent=4)
+# methods for usage in the API
+
+def apiSelectTeacher(id):
+    x = db["allComments"]
+    comments = x.find_one({"teacherID": id})
     
+    return _buildJSON(comments)
+
+def searchTeacher(q):
+    x = db["allComments"]
+    query = {"teacherName": {"$regex": q, "$options": "i"}}  # Case-insensitive regex
+    search = x.find(query).limit(10)
+    
+    results = []
+    for result in search:
+        results.append({"id": result["teacherID"], "name": result["teacherName"]})
+        
+    return json.dumps(results, default=str, indent=4)
