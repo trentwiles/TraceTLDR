@@ -15,8 +15,8 @@
     <nav class="navbar is-primary">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="#">
-                    <strong>MySite</strong>
+                <a class="navbar-item" href="/">
+                    <strong>Trace TL;DR</strong>
                 </a>
                 <span class="navbar-burger" data-target="navbarMenu">
                     <span></span>
@@ -26,23 +26,14 @@
             </div>
             <div id="navbarMenu" class="navbar-menu">
                 <div class="navbar-end">
-                    <a class="navbar-item" href="#">Home</a>
-                    <a class="navbar-item" href="#">About</a>
-                    <a class="navbar-item" href="#">Contact</a>
+                    <a class="navbar-item" href="/">Home</a>
+                    <a class="navbar-item" href="#">How it Works</a>
+                    <a class="navbar-item" href="https://github.com/trentwiles/tracetldr">Source Code</a>
+                    <a class="navbar-item" href="https://www.trentwiles.com">Contact</a>
                 </div>
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
-    <section class="hero is-info">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <h1 class="title">Welcome to MySite</h1>
-                <h2 class="subtitle">Your one-stop destination for amazing content</h2>
-            </div>
-        </div>
-    </section>
 
 
     <section class="section">
@@ -71,16 +62,16 @@
     <script>
         const teacherID = "{{id}}";
 
-        function getRandomReview(reviewList){
+        function getRandomReview(reviewList) {
             return reviewList[Math.floor(Math.random() * reviewList.length)];
         }
 
         $(document).ready(function () {
-            $.getJSON("/_api/getTeacherByID/" + teacherID, function(result){
+            $.getJSON("/_api/getTeacherByID/" + teacherID, function (result) {
 
                 $("#holder").append(`<h1 class="title has-text-centered" id="fullName">${result["teacherName"]}</h1>`)
                 $("#holder").append(`<p class="content" id="tempLoader"><i>Loading...</i></p>`)
-                $.getJSON("/_api/getTeacherSummary/" + teacherID, function(gemini){
+                $.getJSON("/_api/getTeacherSummary/" + teacherID, function (gemini) {
                     $("#tempLoader").hide()
                     $("#holder").append(`
                      <div class="columns is-multiline" id="resultsContainer">
@@ -106,10 +97,26 @@
                         </div>
                     `)
                     /* exit to trace button of sorts*/
+                    $("#holder").append(`
+                        <div class="buttons is-centered" style="margin-bottom: 20px;">
+                            <a class="button is-primary is-large" _target="blank" href="https://www.applyweb.com/eval/shibboleth/neu/36892">Open Trace</a>
+                            <a class="button is-primary is-large" href="/">Search Again</a>
+                        </div>
+                    `);
                 })
             });
         })
     </script>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Trace TL;DR</strong> by <a href="https://www.trentwiles.com">Trent Wiles</a>.
+                <br>
+                Data sourced from Northeastern Trace, source code available on <a
+                    href="https://github.com/trentwiles/tracetldr">Github</a>
+            </p>
+        </div>
+    </footer>
 </body>
 
 </html>
