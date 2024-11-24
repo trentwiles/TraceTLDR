@@ -5,6 +5,11 @@
         <div class="container" id="holder">
 
         </div>
+        <div class="buttons is-centered" style="margin-bottom: 20px;">
+            <a class="button is-primary is-large" _target="blank" href="https://www.applyweb.com/eval/shibboleth/neu/36892">Open Trace</a>
+            <a class="button is-primary is-large" id="rmp" target="_blank">Open Rate My Professor</a>
+            <a class="button is-primary is-large" href="/">Search Again</a>
+        </div>
     </section>
 
     
@@ -21,6 +26,10 @@
         }
 
         $(document).ready(function () {
+            // disable the RMP button
+            $('#rmp').prop('disabled', true);
+            $('#rmp').css('opacity', '0.6');
+
             $.getJSON("/_api/getTeacherByID/" + teacherID, function (result) {
 
                 if (result["teacherName"] == undefined) {
@@ -28,40 +37,48 @@
                 }
 
                 $("#holder").append(`<h1 class="title has-text-centered" id="fullName">${result["teacherName"]}</h1>`)
-                $("#holder").append(`<center><p class="content" id="tempLoader"><i>Loading...</i></p></center>`)
+                $("#holder").append(`<p class="content has-text-centered mb-5" id="tempLoader"><i>Loading...</i></p>`)
                 $(document).attr("title", result["teacherName"] + " Summary | Trace TL;DR");
                 $.getJSON("/_api/getTeacherSummary/" + teacherID, function (gemini) {
                     $("#tempLoader").hide()
                     $("#holder").append(`
-                     <div class="columns is-multiline" id="resultsContainer">
-                        <!-- Half One -->
-                        <div class="column is-one-half result" data-name="Result 1">
+                     <div class="columns">
+                        <!-- First -->
+                        <div class="column">
                             <div class="card">
-                            <div class="card-content">
-                                <p class="title is-5">Postive Summary</p>
-                                <p class="content">Based on all positive reviews, students describe ${result["teacherName"]} as <strong>${gemini["positive"]}</strong></p>
-                                <p class="content"><i>"${getRandomReview(result["all_good_comments"])}"</i></p>
-                            </div>
+                                <div class="card-content">
+                                    <p class="title is-5">Postive Summary</p>
+                                    <p class="content">${gemini["positive"]}</p>
+                                    <p class="content"><i>"${getRandomReview(result["all_good_comments"])}"</i></p>
+                                </div>
                             </div>
                         </div>
-                        <!-- Other Half -->
-                        <div class="column is-one-half result" data-name="Result 1">
+                        <!-- Second -->
+                        <div class="column">
                             <div class="card">
-                            <div class="card-content">
-                                <p class="title is-5">Critical Summary</p>
-                                <p class="content">Based on all critical reviews, students describe ${result["teacherName"]} as <strong>${gemini["critical"]}</strong></p>
-                                <p class="content"><i>"${getRandomReview(result["all_bad_comments"])}"</i></p>
+                                <div class="card-content">
+                                    <p class="title is-5">Critical Summary</p>
+                                    <p class="content">${gemini["critical"]}</p>
+                                    <p class="content"><i>"${getRandomReview(result["all_bad_comments"])}"</i></p>
                                 </div>
                             </div>
                         </div>
                     `)
-                    /* exit to trace button of sorts*/
-                    $("#holder").append(`
-                        <div class="buttons is-centered" style="margin-bottom: 20px;">
-                            <a class="button is-primary is-large" _target="blank" href="https://www.applyweb.com/eval/shibboleth/neu/36892">Open Trace</a>
-                            <a class="button is-primary is-large" href="/">Search Again</a>
-                        </div>
-                    `);
+                    $("#holder").append(`<p class="content has-text-centered mb-5" id="tempLoader2"><i>Loading data from Rate My Professor (may take 5-10 seconds)...</i></p>`)
+                    $.getJSON("/_api/rmpBackend/" + result["teacherName"], function (rmp) {
+                        $("#tempLoader2").hide()
+                        if (rmp["rating"] == null || rmp["rating"] == undefined) {
+                            $("#holder").append(`<p class="content has-text-centered mb-5"><strong>Unable to connection to Rate My Professor</strong></p>`)
+                            
+                        }else{
+                            $("#holder").append(`<p class="content has-text-centered mb-5"><strong>${rmp["rating"]}/5 (${rmp["total"]} reviews) on Rate My Professor</strong></p>`)
+                            // enable the RMP button
+                            $('#rmp').prop('disabled', false);
+                            $('#rmp').css('opacity', '1.0');
+                            $("#rmp").attr("href", rmp["url"])
+                        }
+                    })
+                    
                 })
             });
         })
