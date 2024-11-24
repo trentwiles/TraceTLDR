@@ -26,7 +26,7 @@ cp .env.example .env
 screen python3 run.py
 
 # Run the web server in dev mode
-python3 server.py
+python3 app.py
 ```
 
 ## How to Get Your Trace Cookies
