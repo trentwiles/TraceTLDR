@@ -1,0 +1,30 @@
+<!-- Bulma Navbar Toggle Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        if (navbarBurgers.length > 0) {
+            navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        }
+    });
+
+</script>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <strong>Trace TL;DR</strong> by <a href="https://www.trentwiles.com">Trent Wiles</a>.
+            <br>
+            Data sourced from Northeastern Trace, source code available on <a
+                href="https://github.com/trentwiles/tracetldr">Github</a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>
