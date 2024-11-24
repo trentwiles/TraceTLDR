@@ -27,7 +27,7 @@
             <div id="navbarMenu" class="navbar-menu">
                 <div class="navbar-end">
                     <a class="navbar-item" href="/">Home</a>
-                    <a class="navbar-item" href="#">How it Works</a>
+                    <a class="navbar-item" href="/how-it-works">How it Works</a>
                     <a class="navbar-item" href="https://github.com/trentwiles/tracetldr">Source Code</a>
                     <a class="navbar-item" href="https://www.trentwiles.com">Contact</a>
                 </div>
@@ -43,8 +43,95 @@
             </div>
         </div>
     </section>
-    <section>
-        <p class="content">To Do</p>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <!-- blank.. -->
+                </div>
+                <div class="column">
+                    <h1 class="title">Step Zero</h1>
+                    <p>
+                        Before any data extraction takes place, authentication must happen. As it turns out, the best
+                        way to
+                        authenticate is to copy all cookies the browser is sending ALL of the cookies to the server.
+                    </p>
+                </div>
+                <div class="column">
+                    <!-- blank.. -->
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">Step One</h1>
+                    <p>
+                        First, all trace evaluations pages are collected from reverse engineering Trace's API. These are
+                        stored
+                        locally in a CSV file to be used later. Scraped URLs that contain tables of student-submitted
+                        comments are in the form
+                        <code>https://www.applyweb.com/eval/new/showreport?c={COURSE_ID}&i={INSTRUCTOR_ID}&t={TERM_ID}&r=9&d=true</code>.
+                        I'm unsure as to what the "r" and "d" parameters mean, but I've found that messing around with
+                        throws a 500 internal server error.
+                    </p>
+                </div>
+                <div class="column">
+                    <figure class="image is-3by1">
+                        <img src="https://trentwil.es/a/NWMoU5eO6V.png" alt="Placeholder image">
+                    </figure>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <figure class="image is-3by1">
+                        <img src="https://trentwil.es/a/CSId7iEFgc.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="column">
+                    <h1 class="title">Step Two</h1>
+                    <p>
+                        Next, each URL is scraped, and the comments are extracted into a MongoDB collection. Since there
+                        isn't an API to get comments, I had to use <a
+                            href="https://beautiful-soup-4.readthedocs.io/en/latest/">Beautiful Soup</a> to extract
+                        comments from an HTML table. Note that due to the amount of courses with ratings, I decided it
+                        would be less tedious just to stick to the Spring 2024 semester (id: <code>181</code>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">Step Three</h1>
+                    <p>
+                        Now, all comments are stored in MongoDB, stored by class and professor. Next, I aggregate all of
+                        the comments into one single collection, where comments are sorted by professor.
+                    </p>
+                </div>
+                <div class="column">
+                    <figure class="image is-3by1">
+                        <img src="https://trentwil.es/a/ObMyBuSGdG.png" alt="Placeholder image">
+                    </figure>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <figure class="image is-3by1">
+                        <img src="https://trentwil.es/a/Nre0Kr02Ms.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="column">
+                    <h1 class="title">Step Four</h1>
+                    <p>
+                        Finally, I build a Flask API to serve data from the MongoDB database. Search and retrival
+                        options, there is a route that converts the arrays of comments into a five word summary, powered
+                        by Google Gemini's AI. All API routes are cached behind Varnish Cache to prevent server overload
+                        and to prevent too many requests related errors from the Gemini API.
+                    </p>
+                </div>
+            </div>
+
+        </div>
     </section>
 
 

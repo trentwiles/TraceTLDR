@@ -16,6 +16,10 @@ def home():
 def teacher(id):
     return render_template("view.html", id=id)
 
+@app.route('/how-it-works')
+def works():
+    return render_template("how.html")
+
 @app.route('/_api/getTeacherByID/<int:id>', methods=['GET'])
 def get_data(id):
     id = int(id)

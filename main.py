@@ -2,7 +2,6 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import db
-import time
 
 def authHeaders(cookieBlob):
     return  {
