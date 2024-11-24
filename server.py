@@ -25,9 +25,7 @@ def get_data(id):
 def get_summary(id):
     id = int(id)
     data = db.apiSelectTeacher(id)
-    
-    print(data)
-    
+        
     if data == {} or json.loads(data) == {}:
         return jsonify({"message": "Teacher not found"}), 404
     

@@ -69,8 +69,12 @@
         $(document).ready(function () {
             $.getJSON("/_api/getTeacherByID/" + teacherID, function (result) {
 
+                if (result["teacherName"] == undefined) {
+                    window.location = "/"
+                }
+
                 $("#holder").append(`<h1 class="title has-text-centered" id="fullName">${result["teacherName"]}</h1>`)
-                $("#holder").append(`<p class="content" id="tempLoader"><i>Loading...</i></p>`)
+                $("#holder").append(`<center><p class="content" id="tempLoader"><i>Loading...</i></p></center>`)
                 $(document).attr("title", result["teacherName"] + " Summary | Trace TL;DR");
                 $.getJSON("/_api/getTeacherSummary/" + teacherID, function (gemini) {
                     $("#tempLoader").hide()
