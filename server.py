@@ -5,20 +5,21 @@ from flask import Flask, Response, jsonify, render_template
 import db
 import ai
 import json
+import rmp
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", title="Home")
 
 @app.route('/teacher/<int:id>')
 def teacher(id):
-    return render_template("view.html", id=id)
+    return render_template("view.html", id=id, title="Teacher")
 
 @app.route('/how-it-works')
 def works():
-    return render_template("how.html")
+    return render_template("how.html", title="How it Works")
 
 @app.route('/_api/getTeacherByID/<int:id>', methods=['GET'])
 def get_data(id):
@@ -51,6 +52,11 @@ def get_summary(id):
 @app.route('/_api/searchTeacher/<q>', methods=['GET'])
 def search(q):
     return Response(json.dumps(db.searchTeacher(q)), content_type="application/json")
+
+# not implemented on frontend, far too slow
+@app.route('/_api/rmpBackend/<q>')
+def rate(q):
+    return Response(json.dumps(rmp.getRating(q)), content_type="application/json")
 
 # Start the server
 if __name__ == '__main__':

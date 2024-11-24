@@ -1,4 +1,5 @@
 flask
 requests
-dotenv
+python-dotenv
 google-generativeai
+RateMyProfessorAPI
