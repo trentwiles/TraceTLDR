@@ -10,6 +10,14 @@ def authHeaders(cookieBlob):
         "Cookie": cookieBlob,
     }
 
+def getInternalColleges(auth):
+    r = requests.get("https://www.applyweb.com/eval/new/reportbrowser/schools", headers=auth)
+    codes = []
+    for code in r.json():
+        codes.append(code["schoolCode"])
+        
+    return codes
+
 # 181, "CS"
 def getEvalURLs(auth, termID, collegeID):
     try:
@@ -31,9 +39,9 @@ def getEvalURLs(auth, termID, collegeID):
 def getEvalClassesInternal(auth, termID, collegeID, page):
     data = {
         "page": page,
-        "rpp": 15,
+        "rpp": 200,
         "termIds": [termID],
-        "schoolCodes": [collegeID],
+        "schoolCodes": collegeID,
         "excludeTA": False,
         "sort": None
     }
@@ -68,7 +76,6 @@ def processEachComments(csvFile, auth):
     # courseID,teacherID,teacherName,commentsURL
     with open(csvFile, "r") as file:
         for line in file:
-            time.sleep(2)
             l = line.strip()
             if "courseID" not in l:
                 data = l.split(",")

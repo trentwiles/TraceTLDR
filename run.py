@@ -6,7 +6,6 @@ import os
 load_dotenv()
 
 SKIP_MONGO = False
-SKIP_GEMINI = False
 
 # Step One: Auth
 print("Step One: Auth")
@@ -14,8 +13,9 @@ auth = main.authHeaders(os.getenv("cookies"))
 
 # Step Two: Harvest comment URLs
 print("Step Two: Harvest comment URLs")
+colleges = main.getInternalColleges(auth)
 if not os.path.exists("data.csv"):
-    courses = main.getEvalURLs(auth, 181, "CS")
+    courses = main.getEvalURLs(auth, 181, colleges)
 else:
     print("data.csv already exists, skipping this step")
 
@@ -33,11 +33,3 @@ if not SKIP_MONGO:
         db.selectTeacher(id)
 else:
     print("Honored request to skip MongoDB adding (2)")
-
-# Step Five: Add Google Gemini Summary to MongoDB
-print("Step Five: Add Google Gemini Summary to MongoDB")
-if not SKIP_MONGO:
-    for id in db.getTeachers():
-        db.selectTeacherAllCommentsAndSummarize(id)
-else:
-    print("Honored request to skip Gemini")
