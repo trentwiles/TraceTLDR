@@ -25,8 +25,8 @@ cp .env.example .env
 # Scrape the data and upload to mongo, takes a few hours
 screen python3 run.py
 
-# Run the web server in dev mode
-python3 app.py
+# Run the web server in production mode on port 8000
+gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
 ```
 
 ## How to Get Your Trace Cookies
