@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulma Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar is-primary">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    <strong>MySite</strong>
+                </a>
+                <span class="navbar-burger" data-target="navbarMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="#">Home</a>
+                    <a class="navbar-item" href="#">About</a>
+                    <a class="navbar-item" href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero is-info">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">Welcome to MySite</h1>
+                <h2 class="subtitle">Your one-stop destination for amazing content</h2>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="container" id="holder">
+
+        </div>
+    </section>
+
+    <!-- Bulma Navbar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if (navbarBurgers.length > 0) {
+                navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+
+    </script>
+    <script>
+        const teacherID = "{{id}}";
+
+        function getRandomReview(reviewList){
+            return reviewList[Math.floor(Math.random() * reviewList.length)];
+        }
+
+        $(document).ready(function () {
+            $.getJSON("/_api/getTeacherByID/" + teacherID, function(result){
+
+                $("#holder").append(`<h1 class="title has-text-centered" id="fullName">${result["teacherName"]}</h1>`)
+                $("#holder").append(`<p class="content" id="tempLoader"><i>Loading...</i></p>`)
+                $.getJSON("/_api/getTeacherSummary/" + teacherID, function(gemini){
+                    $("#tempLoader").hide()
+                    $("#holder").append(`
+                     <div class="columns is-multiline" id="resultsContainer">
+                        <!-- Half One -->
+                        <div class="column is-one-half result" data-name="Result 1">
+                            <div class="card">
+                            <div class="card-content">
+                                <p class="title is-5">Postive Summary</p>
+                                <p class="content">Based on all positive reviews, students describe ${result["teacherName"]} as <strong>${gemini["positive"]}</strong></p>
+                                <p class="content"><i>"${getRandomReview(result["all_good_comments"])}"</i></p>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- Other Half -->
+                        <div class="column is-one-half result" data-name="Result 1">
+                            <div class="card">
+                            <div class="card-content">
+                                <p class="title is-5">Critical Summary</p>
+                                <p class="content">Based on all critical reviews, students describe ${result["teacherName"]} as <strong>${gemini["critical"]}</strong></p>
+                                <p class="content"><i>"${getRandomReview(result["all_bad_comments"])}"</i></p>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+                    /* exit to trace button of sorts*/
+                })
+            });
+        })
+    </script>
+</body>
+
+</html>

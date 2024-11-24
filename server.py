@@ -1,22 +1,25 @@
 # converts the results into API format
 
 
-from flask import Flask, request, jsonify
+from flask import Flask, Response, jsonify, render_template
 import db
 import ai
 import json
 
 app = Flask(__name__)
 
-# Welcome route
 @app.route('/')
 def home():
-    return jsonify(message="OMG")
+    return render_template("index.html")
+
+@app.route('/teacher/<int:id>')
+def teacher(id):
+    return render_template("view.html", id=id)
 
 @app.route('/_api/getTeacherByID/<int:id>', methods=['GET'])
 def get_data(id):
     id = int(id)
-    return db.apiSelectTeacher(id)
+    return Response(db.apiSelectTeacher(id), content_type="application/json")
 
 @app.route('/_api/getTeacherSummary/<int:id>', methods=['GET'])
 def get_summary(id):
@@ -45,7 +48,7 @@ def get_summary(id):
 
 @app.route('/_api/searchTeacher/<q>', methods=['GET'])
 def search(q):
-    return db.searchTeacher(q)
+    return Response(json.dumps(db.searchTeacher(q)), content_type="application/json")
 
 # Start the server
 if __name__ == '__main__':

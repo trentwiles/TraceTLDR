@@ -87,6 +87,6 @@ def searchTeacher(q):
     
     results = []
     for result in search:
-        results.append({"id": result["teacherID"], "name": result["teacherName"]})
+        results.append({"id": result["teacherID"], "name": result["teacherName"], "goodCount": len(result["all_good_comments"]), "badCount": len(result["all_bad_comments"]), "url": "/teacher/" + str(result["teacherID"])})
         
-    return json.dumps(results, default=str, indent=4)
+    return results

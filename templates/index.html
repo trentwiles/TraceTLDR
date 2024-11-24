@@ -1,29 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trace</title>
-  <!-- Bulma CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-</head>
-<body>
-  <section class="section">
-    <div class="container">
-      <!-- Title -->
-      <h1 class="title has-text-centered">Search Page</h1>
-      <!-- Search Box -->
-      <div class="field">
-        <div class="control has-icons-left">
-          <input class="input" type="text" placeholder="Search...">
-          <span class="icon is-small is-left">
-            <i class="fas fa-search"></i>
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulma Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar is-primary">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    <strong>MySite</strong>
+                </a>
+                <span class="navbar-burger" data-target="navbarMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="#">Home</a>
+                    <a class="navbar-item" href="#">About</a>
+                    <a class="navbar-item" href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero is-info">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">Welcome to MySite</h1>
+                <h2 class="subtitle">Your one-stop destination for amazing content</h2>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="container">
+
+            <h1 class="title has-text-centered">Search Page</h1>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Search..." id="searchBox">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="section">
+                <div class="columns is-multiline" id="internalResults">
+                    <!-- RESULTS GO HERE -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Script (with jQuery) (i hate frontend)-->
+    <script>
+        function makeResult(name, numberGood, numberBad, url) {
+            return `
+        <div class="column is-one-third">
+            <a href="${url}">
+                <div class="card">
+                <div class="card-content">
+                    <p class="title is-5">${name}</p>
+                    <p class="content">${numberGood} positive comments, ${numberBad} critical comments</p>
+                </div>
+                </div>
+            </a>
+          </div>
+        `
+        }
+
+    </script>
+
+    <!-- Bulma Navbar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if (navbarBurgers.length > 0) {
+                navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+
+
+        $(document).ready(function () {
+            $('#searchBox').on('input', function () {
+                $("#internalResults").html("")
+                const query = $(this).val().toLowerCase();
+                $.ajax({
+                    type: 'GET',
+                    url: '/_api/searchTeacher/' + query,
+                    dataType: 'json',
+                    success: function (data) {
+                        data.forEach((t) => {
+                            $("#internalResults").append(makeResult(t["name"], t["goodCount"], t["badCount"], t["url"]))
+                        })
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
+
 </html>
