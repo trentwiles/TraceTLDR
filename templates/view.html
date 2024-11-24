@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulma Page</title>
+    <title>Trace TL;DR</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -71,6 +71,7 @@
 
                 $("#holder").append(`<h1 class="title has-text-centered" id="fullName">${result["teacherName"]}</h1>`)
                 $("#holder").append(`<p class="content" id="tempLoader"><i>Loading...</i></p>`)
+                $(document).attr("title", result["teacherName"] + " Summary | Trace TL;DR");
                 $.getJSON("/_api/getTeacherSummary/" + teacherID, function (gemini) {
                     $("#tempLoader").hide()
                     $("#holder").append(`

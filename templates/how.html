@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Trace TL;DR</title>
+    <title>How it Works | Trace TL;DR</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -39,54 +39,14 @@
     <section class="hero is-info">
         <div class="hero-body">
             <div class="container has-text-centered">
-                <h1 class="title">Welcome to Trace TL;DR</h1>
-                <h2 class="subtitle">Don't have time to search through Trace? Get a quick summary here.</h2>
+                <h1 class="title">How it Works</h1>
             </div>
         </div>
     </section>
-
-
-    <section class="section">
-        <div class="container">
-
-            <h1 class="title has-text-centered">Search Page</h1>
-
-            <div class="field">
-                <div class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Search..." id="searchBox">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Results Section -->
-            <div id="resultsSection" class="section">
-                <div class="columns is-multiline" id="internalResults">
-                    <!-- RESULTS GO HERE -->
-                </div>
-            </div>
-        </div>
+    <section>
+        <p class="content">To Do</p>
     </section>
 
-    <!-- Search Script (with jQuery) (i hate frontend)-->
-    <script>
-        function makeResult(name, numberGood, numberBad, url) {
-            return `
-        <div class="column is-one-third">
-            <a href="${url}">
-                <div class="card">
-                <div class="card-content">
-                    <p class="title is-5">${name}</p>
-                    <p class="content">${numberGood} positive comments, ${numberBad} critical comments</p>
-                </div>
-                </div>
-            </a>
-          </div>
-        `
-        }
-
-    </script>
 
     <!-- Bulma Navbar Toggle Script -->
     <script>
@@ -105,22 +65,7 @@
         });
 
 
-        $(document).ready(function () {
-            $('#searchBox').on('input', function () {
-                $("#internalResults").html("")
-                const query = $(this).val().toLowerCase();
-                $.ajax({
-                    type: 'GET',
-                    url: '/_api/searchTeacher/' + query,
-                    dataType: 'json',
-                    success: function (data) {
-                        data.forEach((t) => {
-                            $("#internalResults").append(makeResult(t["name"], t["goodCount"], t["badCount"], t["url"]))
-                        })
-                    }
-                });
-            });
-        });
+
 
     </script>
     <footer class="footer">

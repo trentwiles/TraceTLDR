@@ -1,3 +1,5 @@
+# Trace TL;DR
+Don't have time to search through Trace? Get a quick of any Northeastern professor.
 # How it Works
 
 * First, all Khoury classes are scraped from Trace
