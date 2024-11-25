@@ -1,6 +1,8 @@
 # Trace TL;DR
 Don't have time to search through Trace? Get a quick of any Northeastern professor.
 
+Try it out: [trace.trentwiles.com](https://trace.trentwiles.com/?utm_source=github)
+
 # How it Works
 
 * First, all Khoury classes are scraped from Trace
