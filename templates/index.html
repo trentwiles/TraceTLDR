@@ -41,7 +41,7 @@
         <div class="columns">
             {% for card in data %}
             <div class="column is-one-third">
-                <a href="{{url}}">
+                <a href="{{ card.url }}">
                     <div class="card">
                         <div class="card-content">
                             <p class="title is-4">{{ card.teacherName }}</p>
