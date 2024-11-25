@@ -90,3 +90,13 @@ def searchTeacher(q):
         results.append({"id": result["teacherID"], "name": result["teacherName"], "goodCount": len(result["all_good_comments"]), "badCount": len(result["all_bad_comments"]), "url": "/teacher/" + str(result["teacherID"])})
         
     return results
+
+def getRandomFrontend(count:int):
+    data = collection.aggregate([{"$sample": {"size": 3}}])
+    
+    formatData = []
+    
+    for d in data:
+        formatData.append({"teacherName": d["teacherName"], "url": "/teacher/" + str(d["teacherID"]), "description": f"{str(len(d["all_good_comments"]))} positive comments, {str(len(d["all_bad_comments"]))} critical comments"})
+        
+    return formatData

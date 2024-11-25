@@ -1,43 +1,64 @@
+{% include 'header.html' %}
+<!-- Hero Section -->
+<section class="hero is-info">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title">Welcome to Trace TL;DR</h1>
+            <h2 class="subtitle">Don't have time to search through Trace? Get a quick summary here.</h2>
+        </div>
+    </div>
+</section>
 
-    {% include 'header.html' %}
-    <!-- Hero Section -->
-    <section class="hero is-info">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <h1 class="title">Welcome to Trace TL;DR</h1>
-                <h2 class="subtitle">Don't have time to search through Trace? Get a quick summary here.</h2>
+
+<section class="section">
+    <div class="container">
+
+        <h1 class="title has-text-centered">Search Page</h1>
+
+        <div class="field">
+            <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Search..." id="searchBox">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
             </div>
         </div>
-    </section>
 
-
-    <section class="section">
-        <div class="container">
-
-            <h1 class="title has-text-centered">Search Page</h1>
-
-            <div class="field">
-                <div class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Search..." id="searchBox">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Results Section -->
-            <div id="resultsSection" class="section">
-                <div class="columns is-multiline" id="internalResults">
-                    <!-- RESULTS GO HERE -->
-                </div>
+        <!-- Results Section -->
+        <div id="resultsSection" class="section">
+            <div class="columns is-multiline" id="internalResults">
+                <!-- RESULTS GO HERE -->
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Search Script (with jQuery) (i hate frontend)-->
-    <script>
-        function makeResult(name, numberGood, numberBad, url) {
-            return `
+<section class="section">
+    <div class="container">
+
+        <h1 class="title has-text-centered">Featured Instructors</h1>
+
+        <div class="columns">
+            {% for card in data %}
+            <div class="column is-one-third">
+                <a href="/teacher/{{id}}">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title is-4">{{ card.teacherName }}</p>
+                            <p class="content">{{ card.ratingsSummary }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Search Script (with jQuery) (i hate frontend)-->
+<script>
+    function makeResult(name, numberGood, numberBad, url) {
+        return `
         <div class="column is-one-third">
             <a href="${url}">
                 <div class="card">
@@ -49,29 +70,29 @@
             </a>
           </div>
         `
-        }
+    }
 
-    </script>
+</script>
 
-    <script>
+<script>
 
 
-        $(document).ready(function () {
-            $('#searchBox').on('input', function () {
-                $("#internalResults").html("")
-                const query = $(this).val().toLowerCase();
-                $.ajax({
-                    type: 'GET',
-                    url: '/_api/searchTeacher/' + query,
-                    dataType: 'json',
-                    success: function (data) {
-                        data.forEach((t) => {
-                            $("#internalResults").append(makeResult(t["name"], t["goodCount"], t["badCount"], t["url"]))
-                        })
-                    }
-                });
+    $(document).ready(function () {
+        $('#searchBox').on('input', function () {
+            $("#internalResults").html("")
+            const query = $(this).val().toLowerCase();
+            $.ajax({
+                type: 'GET',
+                url: '/_api/searchTeacher/' + query,
+                dataType: 'json',
+                success: function (data) {
+                    data.forEach((t) => {
+                        $("#internalResults").append(makeResult(t["name"], t["goodCount"], t["badCount"], t["url"]))
+                    })
+                }
             });
         });
+    });
 
-    </script>
-    {% include 'footer.html' %}
+</script>
+{% include 'footer.html' %}
