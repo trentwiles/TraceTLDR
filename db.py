@@ -92,7 +92,8 @@ def searchTeacher(q):
     return results
 
 def getRandomFrontend(count:int):
-    data = collection.aggregate([{"$sample": {"size": 3}}])
+    x = db["allComments"]
+    data = x.aggregate([{"$sample": {"size": count}}])
     
     formatData = []
     
