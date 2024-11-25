@@ -97,6 +97,8 @@ def getRandomFrontend(count:int):
     formatData = []
     
     for d in data:
-        formatData.append({"teacherName": d["teacherName"], "url": "/teacher/" + str(d["teacherID"]), "description": f"{str(len(d["all_good_comments"]))} positive comments, {str(len(d["all_bad_comments"]))} critical comments"})
+        goodL = len(d["all_good_comments"])
+        badL = len(d["all_bad_comments"])
+        formatData.append({"teacherName": d["teacherName"], "url": "/teacher/" + str(d["teacherID"]), "description": f"{str(goodL)} positive comments, {str(badL)} critical comments"})
         
     return formatData
