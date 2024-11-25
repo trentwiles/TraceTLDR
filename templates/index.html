@@ -41,11 +41,11 @@
         <div class="columns">
             {% for card in data %}
             <div class="column is-one-third">
-                <a href="/teacher/{{id}}">
+                <a href="{{url}}">
                     <div class="card">
                         <div class="card-content">
                             <p class="title is-4">{{ card.teacherName }}</p>
-                            <p class="content">{{ card.ratingsSummary }}</p>
+                            <p class="content">{{ card.description }}</p>
                         </div>
                     </div>
                 </a>
