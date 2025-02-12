@@ -1,11 +1,7 @@
-import ratemyprofessor
 import requests
 
 # ID used on Rate My Professors
 NORTHEASTERN_SCHOOL_ID = "U2Nob29sLTY5Ng=="
-
-def getNEU():
-    return ratemyprofessor.get_school_by_name("Northeastern University")
 
 def getNEU2(profName):
     data = {
