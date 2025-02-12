@@ -58,7 +58,7 @@ def search(q):
 # not implemented on frontend, far too slow
 @app.route('/_api/rmpBackend/<q>')
 def rate(q):
-    return Response(json.dumps(rmp.getRating(NEU_SCHOOL_OBJECT, q)), content_type="application/json")
+    return Response(json.dumps(rmp.getRating(q)), content_type="application/json")
 
 # Start the server
 if __name__ == '__main__':

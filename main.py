@@ -1,21 +1,12 @@
 import requests
 import os
 from bs4 import BeautifulSoup
-import db
 
 def authHeaders(cookieBlob):
     return  {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",
         "Cookie": cookieBlob,
     }
-
-def getInternalColleges(auth):
-    r = requests.get("https://www.applyweb.com/eval/new/reportbrowser/schools", headers=auth)
-    codes = []
-    for code in r.json():
-        codes.append(code["schoolCode"])
-        
-    return codes
 
 # 181, "CS"
 def getEvalURLs(auth, termID, collegeID):
@@ -38,9 +29,9 @@ def getEvalURLs(auth, termID, collegeID):
 def getEvalClassesInternal(auth, termID, collegeID, page):
     data = {
         "page": page,
-        "rpp": 200,
+        "rpp": 15,
         "termIds": [termID],
-        "schoolCodes": collegeID,
+        "schoolCodes": [collegeID],
         "excludeTA": False,
         "sort": None
     }
@@ -78,18 +69,7 @@ def processEachComments(csvFile, auth):
             l = line.strip()
             if "courseID" not in l:
                 data = l.split(",")
-                try:
-                    comments = scrapeCommentsPage(data[3], auth)
-                    mongoData = {
-                        "courseID": int(data[0]),
-                        "teacherID": int(data[1]),
-                        "teacherName": data[2].replace("-", " "),
-                        "comments": comments
-                    }
-                    db.insert(mongoData)
-                except AttributeError:
-                    print("couldn't scrape, some error")
-                
+                comments = scrapeCommentsPage(data[3], auth)
                 
 def scrapeCommentsPage(url, auth):
     print("scraping url " + url)
@@ -108,15 +88,12 @@ def scrapeCommentsPage(url, auth):
     good = []
     for td in good_comments_table.find_all("td"):
         if td.find("a") != None:
-            good.append(td.text.strip())
+            print(td.text.strip())
             
     bad = []
     for td in bad_comments_table.find_all("td"):
         if td.find("a") != None:
-            bad.append(td.text.strip())
+            print(td.text.strip())
     
     
-    return {"good_comments": good, "bad_comments": bad}
-
-def getAllCommentsPerProf():
     return
