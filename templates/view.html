@@ -68,7 +68,7 @@
                     $.getJSON("/_api/rmpBackend/" + result["teacherName"], function (rmp) {
                         $("#tempLoader2").hide()
                         if (rmp["rating"] == null || rmp["rating"] == undefined) {
-                            $("#holder").append(`<p class="content has-text-centered mb-5"><strong>Unable to connection to Rate My Professor</strong></p>`)
+                            $("#holder").append(`<p class="content has-text-centered mb-5"><strong>Unable to connect to Rate My Professor!</strong></p>`)
                             
                         }else{
                             $("#holder").append(`<p class="content has-text-centered mb-5"><strong>${rmp["rating"]}/5 (${rmp["total"]} reviews) on Rate My Professor</strong></p>`)
