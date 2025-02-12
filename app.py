@@ -9,8 +9,6 @@ import rmp
 
 app = Flask(__name__)
 
-NEU_SCHOOL_OBJECT = rmp.getNEU()
-
 @app.route('/')
 def home():
     return render_template("index.html", title="Home", data=db.getRandomFrontend(3))
