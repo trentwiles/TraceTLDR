@@ -21,8 +21,17 @@ def teacher(id):
 def works():
     return render_template("how.html", title="How it Works")
 
+@app.route('/teacher/<int:id>/comments')
+def verbose_teach(id):
+    return render_template("verbose.html", id=id, title="Teacher Verbose")
+
 @app.route('/_api/getTeacherByID/<int:id>', methods=['GET'])
 def get_data(id):
+    id = int(id)
+    return Response(db.apiSelectTeacher(id), content_type="application/json")
+
+@app.route('/_api/getVerboseTeacherByID/<int:id>', methods=['GET'])
+def get_verbose(id):
     id = int(id)
     return Response(db.apiSelectTeacher(id), content_type="application/json")
 

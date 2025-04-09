@@ -51,7 +51,7 @@ def extractTeacher(newID):
         return None
     
     parsed = result.json()
-    print(parsed)
+
     dataList = parsed["data"]["node"]
     
     if len(dataList) == 0:

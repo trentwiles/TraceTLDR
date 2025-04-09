@@ -3,10 +3,10 @@
 
     <section class="section">
         <div class="container" id="holder">
-
+            <noscript>Enable Javascript To See This Content</noscript>
         </div>
         <div class="buttons is-centered" style="margin-bottom: 20px;">
-            <a class="button is-primary is-large" _target="blank" href="https://www.applyweb.com/eval/shibboleth/neu/36892">Open Trace</a>
+            <a class="button is-primary is-large" id="openTrace" href="#">Open Trace</a>
             <a class="button is-primary is-large" id="rmp" target="_blank">Open Rate My Professor</a>
             <a class="button is-primary is-large" href="/">Search Again</a>
         </div>
@@ -29,6 +29,7 @@
             // disable the RMP button
             $('#rmp').prop('disabled', true);
             $('#rmp').css('opacity', '0.6');
+            $('#openTrace').attr("href", `/teacher/${teacherID}/comments`)
 
             $.getJSON("/_api/getTeacherByID/" + teacherID, function (result) {
 

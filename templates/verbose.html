@@ -1,0 +1,77 @@
+{% include 'header.html' %}
+
+<style>
+    li {
+        list-style: circle;
+        padding-bottom: 10px;
+    }
+    div.cardText {
+        text-align: center;
+    }
+</style>
+
+<section class="section">
+    <div class="container" id="holder">
+
+    </div>
+    <div class="buttons is-centered" style="margin-bottom: 20px;">
+        <a class="button is-primary is-large" _target="blank" href="/" id="backButton">Back</a>
+        <a class="button is-primary is-large" href="/">Search Again</a>
+    </div>
+</section>
+
+<script>
+    const teacherID = "{{id}}";
+
+    $('#backButton').prop('disabled', true);
+    $('#backButton').css('opacity', '0.6');
+
+    $.getJSON("/_api/getVerboseTeacherByID/" + teacherID, function (result) {
+
+        if (result["teacherName"] == undefined) {
+            window.location = "/"
+        }
+
+        console.log(result)
+        $("#holder").append(`
+                     <div class="columns">
+                        <!-- First -->
+                        <div class="column" style="text-align: center;">
+                            <div class="cardText">
+                                <span class="is-size-2">Positive Reviews</span>
+                            </div>
+                            ${result["all_good_comments"].map((element) => `
+                            <div class="card my-5">
+                                <div class="card-content" >
+                                    <div style="padding: 0 20px;">
+                                        <p class="content">
+                                            ${element}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    `).join('')}
+                    </div>
+                        <!-- Second -->
+                        <div class="column">
+                            <div class="cardText">
+                                <span class=" is-size-2 ">Critical Reviews</span>
+                            </div>
+                            ${result["all_bad_comments"].map((element) => `
+                            <div class="card my-5">
+                                <div class="card-content">
+                                    <div style="padding: 0 20px;">
+                                        <p class="content">
+                                            ${element}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    `).join('')}
+                    </div>
+                    `)
+    })
+</script>
+{% include 'footer.html' %}
